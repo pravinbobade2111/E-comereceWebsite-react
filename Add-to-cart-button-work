@@ -1,0 +1,107 @@
+import React, { createContext, useContext, useReducer } from 'react';
+
+// Define the initial state for the cart
+const initialCartState = {
+  cartItems: [],
+};
+
+// Create the CartContext
+const CartContext = createContext();
+
+// Create a CartProvider component
+export const CartProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(cartReducer, initialCartState);
+
+  // Define the cart reducer function
+  const cartReducer = (state, action) => {
+    switch (action.type) {
+      case 'ADD_TO_CART':
+        // Add logic to handle adding to cart or updating quantity
+        return {
+          ...state,
+          cartItems: [...state.cartItems, action.payload],
+        };
+      // Add other cases as needed (e.g., removing from cart)
+      default:
+        return state;
+    }
+  };
+
+  // Define the addToCart action
+  const addToCart = (item) => {
+    dispatch({ type: 'ADD_TO_CART', payload: item });
+  };
+
+  return (
+    <CartContext.Provider value={{ cartState: state, addToCart }}>
+      {children}
+    </CartContext.Provider>
+  );
+};
+
+// Create a custom hook to consume the CartContext
+export const useCart = () => {
+  return useContext(CartContext);
+};
+
+
+
+import React from 'react';
+import { CartProvider } from './CartContext';
+import YourMainComponent from './YourMainComponent';
+
+const App = () => {
+  return (
+    <CartProvider>
+      <YourMainComponent />
+    </CartProvider>
+  );
+};
+
+export default App;
+
+
+
+import React from 'react';
+import { useCart } from './CartContext';
+
+const CartComponent = () => {
+  const { cartState } = useCart();
+  const { cartItems } = cartState;
+
+  // Other code...
+
+  return (
+    <div className="cart-container">
+      <div className="cart-icon" onClick={toggleCart}>
+        Cart Icon ({cartItems.length})
+      </div>
+
+      {/* Other code... */}
+    </div>
+  );
+};
+
+export default CartComponent;
+
+
+
+import React from 'react';
+import { useCart } from './CartContext';
+
+const ProductComponent = ({ product }) => {
+  const { addToCart } = useCart();
+
+  const handleAddToCart = () => {
+    addToCart(product);
+  };
+
+  return (
+    <div>
+      {/* Product details... */}
+      <button onClick={handleAddToCart}>Add to Cart</button>
+    </div>
+  );
+};
+
+export default ProductComponent;

@@ -1,0 +1,61 @@
+// About.js
+import React from 'react';
+
+const About = () => {
+  return (
+    <div>
+      <h2>About Us</h2>
+      {/* About page content */}
+    </div>
+  );
+};
+
+export default About;
+
+
+// App.js
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch, NavLink } from 'react-router-dom';
+import About from './About';
+
+const App = () => {
+  return (
+    <Router>
+      <div>
+        <nav>
+          <NavLink to="/">Home</NavLink>
+          <NavLink to="/about">About</NavLink>
+        </nav>
+        <Switch>
+          <Route path="/about" component={About} />
+          {/* Other routes */}
+        </Switch>
+      </div>
+    </Router>
+  );
+};
+
+export default App;
+
+
+
+/* App.css */
+nav {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  background-color: #eee;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+}
+
+nav a:hover {
+  color: #007bff;
+}
+
+nav a.active {
+  font-weight: bold;
+}
